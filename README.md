@@ -1,4 +1,4 @@
-# ⚡️ DynamicKV: Scalable Web-Based Key-Value Store
+# ⚡️ NitroKV: Scalable Web-Based Key-Value Store
 
 **A Lightweight NoSQL Engine with Adaptive Consistency and Real-Time Synchronization**
 
