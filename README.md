@@ -1,10 +1,10 @@
-# ⚡️ DynamicKV: Scalable Web-Based Key-Value Store
+# ⚡️ NitroKV: Scalable Web-Based Key-Value Store
 
 **A Lightweight NoSQL Engine with Adaptive Consistency and Real-Time Synchronization**
 
 DynamicKV began as a college DBMS project and evolved into a lightweight, high-performance NoSQL key-value store. Written in modern **C++17**, it features a custom-made Robin Hood Hashing-based storage engine and exposes data over HTTP via a **REST API**.
 
-You can run DynamicKV as a standalone binary or easily integrate it into your own services. It's built for speed, scalability, and ease of use.
+You can run NitroKV as a standalone binary or easily integrate it into your own services. It's built for speed, scalability, and ease of use.
 
 ## 🚀 Key Features
 
@@ -35,12 +35,14 @@ You can run DynamicKV as a standalone binary or easily integrate it into your ow
 
 ## 🏁 Quickstart
 
+### 1. Clone & Build
 
+Clone the repository and run `make`:
 
-
-
-
-
+```bash
+git clone [https://github.com/Gamin8ing/DynamicKV.git](https://github.com/Gamin8ing/DynamicKV.git)
+cd NitroKV
+make
 
 This executes the following build command:
 
