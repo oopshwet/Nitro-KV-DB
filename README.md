@@ -1,70 +1,82 @@
-# Nitro-KV-DB
-A Scalable Web-Based Key-Value Store with Adaptive Consistency and Real-Time Synchronization
+# ⚡️ DynamicKV: Scalable Web-Based Key-Value Store
 
-DynamicKV began as our college DBMS project and evolved into a lightweight NoSQL engine with a REST API. It’s written in modern C++17, uses custom made HashMap based on Robin-Hood Hashing, and exposes data over HTTP via Crow. You can play with it as a standalone binary or integrate it into your own services.
+**A Lightweight NoSQL Engine with Adaptive Consistency and Real-Time Synchronization**
 
-🚀 Features
+DynamicKV began as a college DBMS project and evolved into a lightweight, high-performance NoSQL key-value store. Written in modern **C++17**, it features a custom-made Robin Hood Hashing-based storage engine and exposes data over HTTP via a **REST API**.
 
-Model-based storage: Store any “model” (e.g. users, products, etc.) in its own folder under data/.
-Segmented on-disk files: Each model folder contains rolling segment files named:
-.kv — append-only records
-.idx — in-disk index of key→offset pairs
-.bf — Bloom filter for fast “not present” checks
-Tunable segment sizing via config/db.conf.
-In-memory cache with Robin-Hood hashing for hot keys.
-Thread-safe append, lookup, delete operations.
-Pure-C++ REST API using Crow — no external DB required.
-📦 Tech Stack
+You can run DynamicKV as a standalone binary or easily integrate it into your own services. It's built for speed, scalability, and ease of use.
 
-Core: C++, STL, <filesystem>, std::thread/mutex, My own hashmap library
-Networking: Crow (header-only, Flask-style)
-Build & CLI: GNU Makefile / g++ / fmt library
-Configuration: JSON (nlohmann::json)
-🏁 Quickstart
+## 🚀 Key Features
 
-1. Clone & Build
+* **Model-Based Storage:** Store any "model" (e.g., `users`, `products`) in its own dedicated directory under `data/`.
+* **Segmented On-Disk Files:** For high performance and manageability, data is segmented into rolling files:
+    * `.kv`: Append-only record log.
+    * `.idx`: In-disk index of key $\to$ offset pairs.
+    * `.bf`: Bloom filter for extremely fast "not present" checks.
+* **Tunable Performance:** Easily adjust segment sizing via `config/db.conf`.
+* **In-Memory Hot Cache:** Utilizes custom Robin-Hood Hashing for an efficient cache of frequently accessed keys.
+* **Thread-Safe Operations:** Guarantees safe `append`, `lookup`, and `delete` operations using `std::thread` and `std::mutex`.
+* **Pure C++ REST API:** Exposes data via a lightweight Crow web framework—no external database is required.
 
-git clone https://github.com/Gamin8ing/DynamicKV.git
-cd DynamicKV
-make
-This runs:
+---
 
-g++ -std=c++17 -O2 \
-    main.cpp config.cpp bloomfilter.cpp segment.cpp segment_mgr.cpp \
-    storage_engine.cpp thread_pool.cpp \
-    -Iinclude -lfmt -pthread \
-    -o dynamickv
+## 📦 Tech Stack
+
+| Category | Component | Description |
+| :--- | :--- | :--- |
+| **Core** | C++17, STL | High-performance backend engine. |
+| **Concurrency** | `std::thread`, `std::mutex` | Thread-safe operations and concurrency. |
+| **Hashing** | Custom HashMap | Robin-Hood Hashing implementation for efficiency. |
+| **Networking** | Crow | Header-only, Flask-style RESTful server. |
+| **Build & CLI** | GNU `Makefile`, `g++`, `fmt` | Standard build tools and modern formatting library. |
+| **Configuration** | `nlohmann::json` | Simple JSON-based configuration management. |
+
+---
+
+## 🏁 Quickstart
+
+
+
+
+
+
+
+
+This executes the following build command:
+
+g++ -std=c++17 -O2 main.cpp config.cpp bloomfilter.cpp segment.cpp segment_mgr.cpp storage_engine.cpp thread_pool.cpp -Iinclude -lfmt -pthread -o dynamickv
+
 Alternatively, download a prebuilt binary from the Releases page and unpack it.
 
 2. Configure
 
-Edit config/db.conf to your liking (default below):
+Edit the settings in config/db.conf to customize the database behavior.
 
-{
-  "data_dir":        "./data",
-  "segment_size_mb": 64,
-  "file_extension":  ".kv",
-  "index_extension": ".idx",
-  "bloom_extension": ".bf",
-  "bloom_bits_kb":   8,
-  "bloom_hashes":    4,
-  "thread_pool_size":4
+Default config/db.conf:
+
+JSON
+{ 
+  "data_dir": "./data", 
+  "segment_size_mb": 64, 
+  "file_extension": ".kv", 
+  "index_extension": ".idx", 
+  "bloom_extension": ".bf", 
+  "bloom_bits_kb": 8, 
+  "bloom_hashes": 4, 
+  "thread_pool_size": 4 
 }
-data_dir is where your per-model folders (users/, products/, …) live.
-Bloom filter & segment sizing come from here.
-3. Run
+The data_dir specifies where your per-model folders (e.g., users/, products/) will reside. Bloom filter parameters and segment sizing are configured here
 
+Execute the compiled binary:
 ./dynamickv
-By default it listens on port 8008.
 
-📚 API Documentation
-
-All endpoints use JSON. Base URL: http://localhost:8008/
+API Documentation
+All endpoints use JSON for requests and responses. The Base URL is http://localhost:8008/.
 
 Method	Path	Body (JSON)	Description
-GET	/	—	List all models (subdirectories).
-POST	/{model}/{key}	{ "key": "...", ...other fields }	Create model (if needed). If JSON, creates or updates model/key.
-GET	/{model}	—	Get all key→value pairs in model.
-GET	/{model}/{key}	—	Get the single JSON object model/key.
-DELETE	/{model}	—	Delete entire model and files.
-DELETE	/{model}/{key}	—	Delete one key in the model.
+GET	/	—	List all available models (subdirectories).
+POST	/{model}/{key}	{ "key": "...", ...fields }	Create/Update: Creates the model if it doesn't exist. Upserts the JSON object for the specified key.
+GET	/{model}	—	List: Get all key → value pairs within the specified model.
+GET	/{model}/{key}	—	Retrieve: Get the single JSON object associated with key in the model.
+DELETE	/{model}	—	Delete Model: Delete the entire model and all associated on-disk files.
+DELETE	/{model}/{key}	—	Delete Key: Delete one key-value record from the model.
