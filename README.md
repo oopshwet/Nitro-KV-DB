@@ -1,8 +1,8 @@
-# DynamicKV
+# NitroKV
 
 **A Scalable Web-Based Key-Value Store with Adaptive Consistency and Real-Time Synchronization**
 
-DynamicKV began as our college DBMS project and evolved into a lightweight NoSQL engine with a REST API. It’s written in modern C++17, uses custom made HashMap based on Robin-Hood Hashing, and exposes data over HTTP via [Crow](https://crowcpp.org/). You can play with it as a standalone binary or integrate it into your own services.
+NitroKV began as our college DBMS project and evolved into a lightweight NoSQL engine with a REST API. It’s written in modern C++17, uses custom made HashMap based on Robin-Hood Hashing, and exposes data over HTTP via [Crow](https://crowcpp.org/). You can play with it as a standalone binary or integrate it into your own services.
 
 ---
 
